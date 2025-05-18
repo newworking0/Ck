@@ -7,8 +7,7 @@ import hashlib
 import requests
 import urllib3
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, filters, CallbackContext
-
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, CallbackContext
 # Disable insecure request warnings (for Stripe API calls with verify=False)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -263,18 +262,16 @@ def bin_command(update: Update, context: CallbackContext):
     update.message.reply_text(response, parse_mode='Markdown')
 
 def main():
-    updater = Updater(BOT_TOKEN)
-    dp = updater.dispatcher
+    application = ApplicationBuilder().token(BOT_TOKEN).build()
 
-    dp.add_handler(CommandHandler('start', start))
-    dp.add_handler(CommandHandler('register', register))
-    dp.add_handler(MessageHandler(Filters.regex(r'^(/chk|\.chk)'), check_command))
-    dp.add_handler(CommandHandler('gen', generate_command))
-    dp.add_handler(CommandHandler('bin', bin_command))
+    application.add_handler(CommandHandler('start', start))
+    application.add_handler(CommandHandler('register', register))
+    application.add_handler(MessageHandler(filters.Regex(r'^(/chk|\.chk)'), check_command))
+    application.add_handler(CommandHandler('gen', generate_command))
+    application.add_handler(CommandHandler('bin', bin_command))
 
     print("Bot is running...")
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
 if __name__ == '__main__':
     main()
