@@ -7,7 +7,7 @@ import hashlib
 import requests
 import urllib3
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import Updater, CommandHandler, MessageHandler, filters, CallbackContext
 
 # Disable insecure request warnings (for Stripe API calls with verify=False)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
